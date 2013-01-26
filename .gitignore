@@ -2,4 +2,8 @@ daytime_client
 *.pro
 *.pro.user
 *.o
+bin
+*.cbp
+*.depend
+*.layout
 Makefile
