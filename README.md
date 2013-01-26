@@ -1,2 +1,0 @@
-daytime_client
-==============
