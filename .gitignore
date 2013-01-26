@@ -1,0 +1,5 @@
+daytime_client
+*.pro
+*.pro.user
+*.o
+Makefile
