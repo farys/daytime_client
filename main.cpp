@@ -1,15 +1,20 @@
 #include <iostream>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <netdb.h>
 #include <stdlib.h>
-#include <arpa/inet.h>
 #include <memory.h>
 #include <signal.h>
 #include <time.h>
 #include <cstdio>
 #include <unistd.h>
+
+#ifdef WIN32
+#include <winsock2.h>
+#else
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#endif
 
 using namespace std;
 
@@ -38,7 +43,6 @@ public:
           int hib = HIBYTE(wsaData.wHighVersion);
           int lob = LOBYTE(wsaData.wHighVersion);
           cout << "Wersja: " << hib << "." << lob << endl;
-          cout << "maks. liczba socketow: " << wsaData.iMaxSockets << endl;
           return ver;
         #else
           return 0;
@@ -104,6 +108,7 @@ public:
                 host_addr.sin_port=htons(atoi(port));
         else host_addr.sin_port=pse->s_port;
 
+        cout <<"Adres IP: " << host << endl;
         cout <<"Port: " << ntohs(host_addr.sin_port) << endl;
 
         host_addr.sin_addr.s_addr=inet_addr(host);
@@ -118,17 +123,26 @@ public:
 
         char tekst[2] = {'0', 0};
         sendto(sock, tekst, strlen(tekst), 0, (sockaddr*) &host_addr, sizeof(host_addr));
-        cout << "Wyslano zadanio o czas." << endl;
+        cout << "Wyslano pytanie o czas." << endl;
         return true;
     }
 };
 
-int main()
+int main(int argc, char *argv[])
 {
     DaytimeClient client;
+    char *ip, *port;
+
+    if(argc == 3){
+        ip = argv[1];
+        port = argv[2];
+    }else{
+        ip = "localhost";
+        port = "3000";
+    }
 
     client.start();
-    client.sendRequest("localhost", "3000");
+    client.sendRequest(ip, port);
     cout << "Otrzymano odpowiedz: " << client.receiveAnswer(2) << endl;
     client.stop();
 
