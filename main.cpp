@@ -131,18 +131,17 @@ public:
 int main(int argc, char *argv[])
 {
     DaytimeClient client;
-    char *ip, *port;
+    char *host = "localhost";
+    char *port = "3000";
 
-    if(argc == 3){
-        ip = argv[1];
+    if(argc >= 2)
+        host = argv[1];
+
+    if(argc == 3)
         port = argv[2];
-    }else{
-        ip = "localhost";
-        port = "3000";
-    }
 
     client.start();
-    client.sendRequest(ip, port);
+    client.sendRequest(host, port);
     cout << "Otrzymano odpowiedz: " << client.receiveAnswer(2) << endl;
     client.stop();
 
