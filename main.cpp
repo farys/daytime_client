@@ -4,7 +4,6 @@
 #include <signal.h>
 #include <time.h>
 #include <cstdio>
-#include <unistd.h>
 
 //naglowki do windowsa
 #ifdef WIN32
